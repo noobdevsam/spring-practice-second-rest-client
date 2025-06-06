@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 @Configuration
@@ -38,8 +38,8 @@ public class RestTemplateConfig {
     }
 
     @Bean
-    RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
-        return restTemplateBuilder.build();
+    public RestClient.Builder restClientBuilder(RestTemplateBuilder restTemplateBuilder) {
+        return RestClient.builder(restTemplateBuilder.build());
     }
 
     /**
