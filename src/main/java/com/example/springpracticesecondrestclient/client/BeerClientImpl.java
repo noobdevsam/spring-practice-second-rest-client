@@ -1,11 +1,13 @@
 package com.example.springpracticesecondrestclient.client;
 
 import com.example.springpracticesecondrestclient.model.BeerDTO;
+import com.example.springpracticesecondrestclient.model.BeerDTOPageImpl;
 import com.example.springpracticesecondrestclient.model.BeerStyle;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.UUID;
 
@@ -20,12 +22,46 @@ public class BeerClientImpl implements BeerClient {
 
     @Override
     public Page<BeerDTO> listBeers() {
-        return null;
+        return listBeers(null, null, null, null, null);
     }
 
     @Override
-    public Page<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory, Integer pageNumber, Integer pageSize) {
-        return null;
+    public Page<BeerDTO> listBeers(
+            String beerName,
+            BeerStyle beerStyle,
+            Boolean showInventory,
+            Integer pageNumber,
+            Integer pageSize) {
+        var restClient = restClientBuilder.build();
+
+        var uriComponentBuilder = UriComponentsBuilder.fromPath(GET_BEER_PATH);
+
+
+        if (beerName != null) {
+            uriComponentBuilder.queryParam("beerName", beerName);
+        }
+
+        if (beerStyle != null) {
+            uriComponentBuilder.queryParam("beerStyle", beerStyle);
+        }
+
+        if (showInventory != null) {
+            uriComponentBuilder.queryParam("showInventory", beerStyle);
+        }
+
+        if (pageNumber != null) {
+            uriComponentBuilder.queryParam("pageNumber", beerStyle);
+        }
+
+        if (pageSize != null) {
+            uriComponentBuilder.queryParam("pageSize", beerStyle);
+        }
+
+        return restClient.get()
+                .uri(uriComponentBuilder.toUriString())
+                .retrieve()
+                .body(BeerDTOPageImpl.class);
+
     }
 
     @Override
