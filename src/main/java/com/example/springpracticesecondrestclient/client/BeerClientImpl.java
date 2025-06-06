@@ -35,7 +35,22 @@ public class BeerClientImpl implements BeerClient {
 
     @Override
     public BeerDTO createBeer(BeerDTO newBeerDTO) {
-        return null;
+        var restClient = restClientBuilder.build();
+
+        var location = restClient.post()
+                .uri(uriBuilder -> uriBuilder.path(GET_BEER_PATH).build())
+                .body(newBeerDTO)
+                .retrieve()
+                .toBodilessEntity()
+                .getHeaders()
+                .getLocation();
+
+        assert location != null;
+
+        return restClient.get()
+                .uri(location.getPath())
+                .retrieve()
+                .body(BeerDTO.class);
     }
 
     @Override
